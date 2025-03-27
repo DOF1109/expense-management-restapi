@@ -9,7 +9,7 @@
 * Lombok
 * MySQL Driver (MySQL Connector J)
 * Spring Data JPA (Spring Boot Starter Data JPA)
-* Model Mapper
+* Model Mapper (modelmapper.org)
 
 ### 4. Create IO objects
 * Request and response objects interact with the UI layer

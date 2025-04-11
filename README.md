@@ -40,4 +40,7 @@
 * Expose the API
 * It contains handler methods that map to a URI paths using `@RequestMapping` annotation with HTTP methods
 
-### 10. Test the API
+### 10. Handle Exceptions
+* Create a ErrorObject (IO package)
+* Create a ResourceNotFoundException (exception package)
+* Create a GlobalExceptionHandler (exception package)

@@ -7,6 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * ErrorObject is a class that represents the structure of an error response.
+ * It contains information about the error, including the status code, message,
+ * timestamp, and error code.
+ * @author Daniel Frias
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

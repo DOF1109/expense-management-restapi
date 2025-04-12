@@ -2,6 +2,7 @@ package com.danielfrias.restapi.service.impl;
 
 import com.danielfrias.restapi.dto.ExpenseDTO;
 import com.danielfrias.restapi.entity.ExpenseEntity;
+import com.danielfrias.restapi.exceptions.ResourceNotFoundException;
 import com.danielfrias.restapi.repository.ExpenseRepository;
 import com.danielfrias.restapi.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,24 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public List<ExpenseDTO> getAllExpenses() {
         List<ExpenseEntity> list = expenseRepository.findAll();
-        log.info("Printing the data from repository \n{}", list);
+        log.info("Printing all expenses from repository \n{}", list);
         // Convert the list of Entity objects to DTO objects
         List<ExpenseDTO> listOfExpenses = list.stream()
-                .map(expenseEntity -> modelMapper.map(expenseEntity, ExpenseDTO.class))
+                .map(expenseEntity -> mapToExpenseDTO(expenseEntity))
                 .toList();
         return listOfExpenses;
     }
+
+    @Override
+    public ExpenseDTO getExpenseById(String expenseId) {
+        ExpenseEntity optionalExpense = expenseRepository.findByExpenseId(expenseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not founded expense with id: " + expenseId));
+        log.info("Printing a expense from repository \n{}", optionalExpense);
+        return mapToExpenseDTO(optionalExpense);
+    }
+
+    private ExpenseDTO mapToExpenseDTO(ExpenseEntity expenseEntity) {
+        return modelMapper.map(expenseEntity, ExpenseDTO.class);
+    }
+
 }

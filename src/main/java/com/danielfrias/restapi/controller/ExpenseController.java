@@ -6,6 +6,7 @@ import com.danielfrias.restapi.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,9 +35,10 @@ public class ExpenseController {
         return mapToExpenseResponse(expenseDTO);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/expenses/{expenseId}")
-    public String deleteExpenseByExpenseId(@PathVariable String expenseId) {
-        return "Deleting the expense with id: " + expenseId;
+    public void deleteExpenseByExpenseId(@PathVariable String expenseId) {
+        expenseService.deleteExpenseByExpenseId(expenseId);
     }
 
     private ExpenseResponse mapToExpenseResponse(ExpenseDTO expenseDTO) {

@@ -32,10 +32,18 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public ExpenseDTO getExpenseById(String expenseId) {
-        ExpenseEntity optionalExpense = expenseRepository.findByExpenseId(expenseId)
+        ExpenseEntity expenseEntity = expenseRepository.findByExpenseId(expenseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not founded expense with id: " + expenseId));
-        log.info("Printing a expense from repository \n{}", optionalExpense);
-        return mapToExpenseDTO(optionalExpense);
+        log.info("Printing a expense from repository \n{}", expenseEntity);
+        return mapToExpenseDTO(expenseEntity);
+    }
+
+    @Override
+    public void deleteExpenseByExpenseId(String expenseId) {
+        ExpenseEntity expenseEntity = expenseRepository.findByExpenseId(expenseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not founded expense with id: " + expenseId));
+        log.info("Deleting the expense with id: {}", expenseId);
+        expenseRepository.delete(expenseEntity);
     }
 
     private ExpenseDTO mapToExpenseDTO(ExpenseEntity expenseEntity) {

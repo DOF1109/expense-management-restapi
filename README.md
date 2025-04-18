@@ -7,9 +7,10 @@
 ### 3. Add necessary dependencies in `pom.xml`
 * Spring Boot Starter Web
 * Lombok
-* MySQL Driver (MySQL Connector J)
-* Spring Data JPA (Spring Boot Starter Data JPA)
+* MySQL Driver (mysql-connector-j)
+* Spring Data JPA (spring-boot-starter-data-jpa)
 * Model Mapper (modelmapper.org)
+* Hibernate Validator (spring-boot-starter-validation)
 
 ### 4. Create IO objects
 * Request and response objects interact with the UI layer

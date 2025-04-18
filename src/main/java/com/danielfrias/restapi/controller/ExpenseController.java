@@ -1,8 +1,10 @@
 package com.danielfrias.restapi.controller;
 
 import com.danielfrias.restapi.dto.ExpenseDTO;
+import com.danielfrias.restapi.io.ExpenseRequest;
 import com.danielfrias.restapi.io.ExpenseResponse;
 import com.danielfrias.restapi.service.ExpenseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -39,6 +41,13 @@ public class ExpenseController {
     @DeleteMapping("/expenses/{expenseId}")
     public void deleteExpenseByExpenseId(@PathVariable String expenseId) {
         expenseService.deleteExpenseByExpenseId(expenseId);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/expenses")
+    public ExpenseRequest saveExpenseDetails(@Valid @RequestBody ExpenseRequest expenseRequest) {
+        log.info("API Post /expenses called {}", expenseRequest);
+        return expenseRequest;
     }
 
     private ExpenseResponse mapToExpenseResponse(ExpenseDTO expenseDTO) {

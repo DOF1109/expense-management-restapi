@@ -26,7 +26,7 @@ public class ExpenseController {
         List<ExpenseDTO> list = expenseService.getAllExpenses();
         // Convert the list of DTO objects to Response objects
         List<ExpenseResponse> response = list.stream()
-                .map(expenseDTO -> mapToExpenseResponse(expenseDTO))
+                .map(expenseDTO -> mapExpenseDTOToExpenseResponse(expenseDTO))
                 .toList();
         return response;
     }
@@ -34,7 +34,7 @@ public class ExpenseController {
     @GetMapping("/expenses/{expenseId}")
     public ExpenseResponse getExpenseById(@PathVariable String expenseId) {
         ExpenseDTO expenseDTO = expenseService.getExpenseById(expenseId);
-        return mapToExpenseResponse(expenseDTO);
+        return mapExpenseDTOToExpenseResponse(expenseDTO);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -45,13 +45,18 @@ public class ExpenseController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/expenses")
-    public ExpenseRequest saveExpenseDetails(@Valid @RequestBody ExpenseRequest expenseRequest) {
-        log.info("API Post /expenses called {}", expenseRequest);
-        return expenseRequest;
+    public ExpenseResponse saveExpenseDetails(@Valid @RequestBody ExpenseRequest expenseRequest) {
+        ExpenseDTO expenseDTO = mapExpenseRequestToExpenseDTO(expenseRequest);
+        expenseDTO = expenseService.saveExpenseDetails(expenseDTO);
+        return mapExpenseDTOToExpenseResponse(expenseDTO);
     }
 
-    private ExpenseResponse mapToExpenseResponse(ExpenseDTO expenseDTO) {
+    private ExpenseResponse mapExpenseDTOToExpenseResponse(ExpenseDTO expenseDTO) {
         return modelMapper.map(expenseDTO, ExpenseResponse.class);
+    }
+
+    private ExpenseDTO mapExpenseRequestToExpenseDTO(ExpenseRequest expenseRequest) {
+        return modelMapper.map(expenseRequest, ExpenseDTO.class);
     }
 
 }

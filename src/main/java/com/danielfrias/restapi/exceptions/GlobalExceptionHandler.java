@@ -26,6 +26,11 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    /**
+     * Handles ResourceNotFoundException.
+     * @param ex the exception thrown
+     * @return a standardized error response
+     */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
     public ErrorObject handleResourceNotFoundException(ResourceNotFoundException ex) {
@@ -38,6 +43,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
     }
 
+    /**
+     * Handles validation errors.
+     * @param ex the exception thrown
+     * @param headers the HTTP headers
+     * @param status the HTTP status code
+     * @param request the web request
+     * @return a ResponseEntity with the error details
+     */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,

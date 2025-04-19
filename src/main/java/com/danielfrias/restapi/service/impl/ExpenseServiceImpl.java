@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         log.info("Printing all expenses from repository \n{}", list);
         // Convert the list of Entity objects to DTO objects
         List<ExpenseDTO> listOfExpenses = list.stream()
-                .map(expenseEntity -> mapToExpenseDTO(expenseEntity))
+                .map(expenseEntity -> mapExpenseEntityToExpenseDTO(expenseEntity))
                 .toList();
         return listOfExpenses;
     }
@@ -34,7 +35,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     public ExpenseDTO getExpenseById(String expenseId) {
         ExpenseEntity expenseEntity = getExpenseEntity(expenseId);
         log.info("Printing a expense from repository \n{}", expenseEntity);
-        return mapToExpenseDTO(expenseEntity);
+        return mapExpenseEntityToExpenseDTO(expenseEntity);
     }
 
     @Override
@@ -44,8 +45,21 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseRepository.delete(expenseEntity);
     }
 
-    private ExpenseDTO mapToExpenseDTO(ExpenseEntity expenseEntity) {
+    @Override
+    public ExpenseDTO saveExpenseDetails(ExpenseDTO expenseDTO) {
+        ExpenseEntity newExpenseEntity = mapExpenseDTOToExpenseEntity(expenseDTO);
+        newExpenseEntity.setExpenseId(UUID.randomUUID().toString());
+        newExpenseEntity = expenseRepository.save(newExpenseEntity);
+        log.info("Saving a new expense with id: {}", newExpenseEntity.getExpenseId());
+        return mapExpenseEntityToExpenseDTO(newExpenseEntity);
+    }
+
+    private ExpenseDTO mapExpenseEntityToExpenseDTO(ExpenseEntity expenseEntity) {
         return modelMapper.map(expenseEntity, ExpenseDTO.class);
+    }
+
+    private ExpenseEntity mapExpenseDTOToExpenseEntity(ExpenseDTO expenseDTO) {
+        return modelMapper.map(expenseDTO, ExpenseEntity.class);
     }
 
     private ExpenseEntity getExpenseEntity(String expenseId) {

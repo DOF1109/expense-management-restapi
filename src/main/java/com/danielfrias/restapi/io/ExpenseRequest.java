@@ -2,6 +2,7 @@ package com.danielfrias.restapi.io;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +22,11 @@ public class ExpenseRequest {
     private String name;
     private String note;
     @NotBlank(message = "Expense category is required")
+    @Size(min = 3, max = 50, message = "Expense category must be between 3 and 50 characters")
     private String category;
     @NotNull(message = "Expense date is required")
     private Date date;
     @NotNull(message = "Expense amount is required")
+    @Positive(message = "Expense amount must be positive")
     private BigDecimal amount;
 }
